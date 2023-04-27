@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:provider/provider.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:iavc_notification/notification.dart';
 import 'package:iavc_notification/param.dart';
 import 'package:location/location.dart';
 
@@ -44,14 +45,16 @@ class PageAccueilState extends State<PageAccueil> {
     GoogleMapController googleMapController = await _controller.future;
 
     //Ecouter le changement de position
-    location.onLocationChanged.listen((newlocation) {
-      currentLocation = newlocation;
+    location.onLocationChanged.listen((trajet) {
+      currentLocation = trajet;
 
       googleMapController.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
-            zoom: 13.5,
-            target: LatLng(newlocation.latitude!, newlocation.longitude!)),
+            zoom: 13.5, target: LatLng(trajet.latitude!, trajet.longitude!)),
       ));
+
+      // Afficher la notification de la carte en miniature
+      showMapNotification(context, googleMapController);
 
       setState(() {});
     });
@@ -99,7 +102,7 @@ class PageAccueilState extends State<PageAccueil> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: currentLocation == null
-          ? const Center(child: Text(""))
+          ? const Center(child: Text("En cours"))
           : GoogleMap(
               initialCameraPosition: CameraPosition(
                   target: LatLng(

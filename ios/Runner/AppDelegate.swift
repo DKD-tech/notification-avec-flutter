@@ -6,6 +6,7 @@ import Flutter
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    
   ) -> Bool {
     GMSServices.provideAPIKey("AIzaSyDa3IqeHXBbgXdEK3MVYb9GhQ86zFJuzTw")
     GeneratedPluginRegistrant.register(with: self)
