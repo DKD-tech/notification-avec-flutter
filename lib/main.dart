@@ -5,43 +5,51 @@ import 'package:workmanager/workmanager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
-  Workmanager().registerPeriodicTask(
-    "2",
-    "simplePeriodicTask",
-    frequency: Duration(minutes: 15),
-  );
+
+  // Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  //Pattern Singletonj
+  // Workmanager().registerPeriodicTask(
+  //   "2",
+  //   "simplePeriodicTask",
+  //   frequency: const Duration(minutes: 1),
+  // );
   runApp(MyApp());
 }
 
-void callbackDispatcher() {
-  Workmanager().executeTask((taskName, inputData) {
-    FlutterLocalNotificationsPlugin local =
-        new FlutterLocalNotificationsPlugin();
+// void callbackDispatcher() {
+//   Workmanager().executeTask((taskName, inputData) {
+//     FlutterLocalNotificationsPlugin local = FlutterLocalNotificationsPlugin();
 
-    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+//     const android = AndroidInitializationSettings(
+//       '@mipmap/ic_launcher',
+//     );
 
-    var settings = new InitializationSettings(android: android);
+//     var settings = const InitializationSettings(android: android);
 
-    local.initialize(settings);
+//     local.initialize(settings);
 
-    _showNotificationWithDefaultSound(local);
+//     _showNotificationWithDefaultSound(local);
 
-    return Future.value(true);
-  });
-}
+//     return Future.value(true);
+//   });
+// }
 
-Future _showNotificationWithDefaultSound(local) async {
-  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      'ROMAIN', 'Trajet',
-      importance: Importance.max, priority: Priority.high);
+// Future _showNotificationWithDefaultSound(FlutterLocalNotificationsPlugin local,
+//     {int maxProgress = 0, int progress = 0}) async {
+//   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//       'channelId', 'channelName',
+//       showProgress: true,
+//       maxProgress: maxProgress,
+//       progress: progress,
+//       importance: Importance.max,
+//       priority: Priority.high);
 
-  var platformChannelSpecifics =
-      new NotificationDetails(android: androidPlatformChannelSpecifics);
+//   var platformChannelSpecifics =
+//       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  await local.show(0, '', '', platformChannelSpecifics,
-      payload: 'Default_Sound');
-}
+//   await local.show(0, 'Titre', 'Corps', platformChannelSpecifics,
+//       payload: 'Default_Sound');
+// }
 
 class MyApp extends StatelessWidget {
   //const MyApp({super.key});
@@ -60,3 +68,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+/**
+ * 
+ */

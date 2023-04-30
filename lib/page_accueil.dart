@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
@@ -24,6 +25,36 @@ class PageAccueilState extends State<PageAccueil> {
 
   final Completer<GoogleMapController> _controller = Completer();
 
+  // static final CameraPosition initialilLocatioin = CameraPosition(target:LatLng(laltitude,longitude), zoom: 14.5)
+
+/**
+ * Future<Uint8List> getMarker() async {
+    ByteData byteData =
+        await DefaultAssetBundle.of(context).load("../assets/exple.png");
+    return byteData.buffer.asUint8List();
+  }
+  void updateMarkerAndCircle(LocationData newLocalData, Uint8List imageData) {
+    LatLng latLng = LatLng(newLocalData.latitude, newLocalData.longitude);
+    setState(() {
+      Marker(
+          markerId: MarkerId("home"),
+          position: latLng,
+          rotation: newLocalData.heading,
+          draggable: false,
+          zIndex: 2,
+          flat: true,
+          anchor: Offset(0.5, 0.5),
+          icon: BitmapDescriptor.fromBytes(imageData));
+      Circle(
+          circleId: CircleId("car"),
+          radius: newLocalData.accuracy,
+          zIndex: 1,
+          strokeColor: Colors.blue,
+          center: latLng,
+          fillColor: Colors.blue.withAlpha(70));
+    });
+  }
+*/
   static const LatLng sourceLocation = LatLng(49.8869994, 2.2933316);
   static const LatLng destination = LatLng(49.8978432, 2.3005744);
 
@@ -35,6 +66,7 @@ class PageAccueilState extends State<PageAccueil> {
   //BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
 
 //recuperation de la localisation
+  int pross = 0;
   void getCurrentLocation() async {
     Location location = Location();
 
@@ -52,9 +84,13 @@ class PageAccueilState extends State<PageAccueil> {
         CameraPosition(
             zoom: 13.5, target: LatLng(trajet.latitude!, trajet.longitude!)),
       ));
-
+      var diff = ((destination.latitude - trajet.latitude!) * 10000000).toInt();
+      //  print("diff $diff; ${(destination.latitude * 10000000).toInt()}");
+      // print((destination.latitude - trajet.latitude!));
       // Afficher la notification de la carte en miniature
-      showMapNotification(context, googleMapController);
+      print('pross $pross');
+      showMapNotification(context, googleMapController,
+          lineProgress: true, progress: pross++, maxProgress: 100);
 
       setState(() {});
     });
@@ -93,6 +129,7 @@ class PageAccueilState extends State<PageAccueil> {
   @override
   void initState() {
     getCurrentLocation();
+    //getMarker();
     //// setEndMarkerIcon();
     getPolyPoints();
     super.initState();
@@ -102,7 +139,7 @@ class PageAccueilState extends State<PageAccueil> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: currentLocation == null
-          ? const Center(child: Text("En cours"))
+          ? const Center(child: Text(""))
           : GoogleMap(
               initialCameraPosition: CameraPosition(
                   target: LatLng(
@@ -118,8 +155,8 @@ class PageAccueilState extends State<PageAccueil> {
                         currentLocation!.longitude!)),
                 const Marker(
                     markerId: MarkerId("source"), position: sourceLocation),
-                ////  const Marker(
-                ////  markerId: MarkerId("destination"), position: destination)
+                const Marker(
+                    markerId: MarkerId("destination"), position: destination)
               },
               onMapCreated: (controller) {
                 //passer le googleController default a  et mettre à jour la postition de la camera sur la carte
@@ -130,7 +167,7 @@ class PageAccueilState extends State<PageAccueil> {
                     polylineId: const PolylineId("route"),
                     points: polylineCoordinates,
                     color: const Color(0xFF7B61FF),
-                    width: 8),
+                    width: 6),
               },
             ),
     );

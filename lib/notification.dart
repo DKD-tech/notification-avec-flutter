@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:workmanager/workmanager.dart';
 
 Future<void> showMapNotification(
-    BuildContext context, GoogleMapController controller) async {
+    BuildContext context, GoogleMapController controller,
+    {int progress = 0, int maxProgress = 0, bool lineProgress = false}) async {
   // Capturer une capture d'écran de la carte miniature.
   final imageBytes = await captureMap(controller);
 
@@ -17,6 +16,9 @@ Future<void> showMapNotification(
     'channelName',
     importance: Importance.max,
     priority: Priority.high,
+    showProgress: lineProgress,
+    progress: progress,
+    maxProgress: 100,
     //largeIcon: BitmapDescriptor
     //largeIcon: BitmapSource.bytes(imageBytes),
   );
