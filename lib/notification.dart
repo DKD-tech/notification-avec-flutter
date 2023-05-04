@@ -26,6 +26,7 @@ Future<void> showMapNotification(BuildContext context,
     showProgress: lineProgress,
     progress: progress,
     maxProgress: 100,
+    playSound: false,
   );
 
   final platformChannelSpecifics =
@@ -40,21 +41,3 @@ Future<void> showMapNotification(BuildContext context,
     platformChannelSpecifics,
   );
 }
-
-// Future<Uint8List?> captureMap(GoogleMapController controller) async {
-//   // Récupérer la capture d'écran de la carte miniature.
-//   final imageBytes = await controller.takeSnapshot();
-//   final uiImage = await loadImage(imageBytes!);
-
-//   // Convertir la capture d'écran en bytes.
-//   final byteData = await uiImage.toByteData(format: ui.ImageByteFormat.png);
-//   final pngBytes = byteData!.buffer.asUint8List();
-
-//   return pngBytes;
-// }
-
-// Future<ui.Image> loadImage(Uint8List bytes) async {
-//   final codec = await ui.instantiateImageCodec(bytes);
-//   final frame = await codec.getNextFrame();
-//   return frame.image;
-// }
